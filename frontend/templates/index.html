@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type='text/css' href='{% static 'css/styles.css' %}'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+  <title>Chat Interface</title>
+</head>
+<body>
+  <div class="chatbox-wrapper">
+    <div class="message-box" id="message-box">
+      <div class="chat response">
+        <img src="{% static 'img/chatbot.jpg' %}">
+        <span>Hello there! <br> How can I help you today?</span>
+      </div>
+    </div>
+    <div class="messagebar">
+      <div class="bar-wrapper">
+        {% csrf_token %}
+        <input type="text" id="message-input" placeholder="Enter your message...">
+        <button id="send-button">
+          <span class="material-symbols-rounded">send</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Pass the CSRF token from the template to JavaScript
+    const csrfToken = "{{ csrf_token }}";
+    const userImage = "{% static 'img/user.jpg' %}";
+    const chatbotImage = "{% static 'img/chatbot.jpg' %}";
+  </script>
+  <script src="{% static 'js/chatscript.js' %}"></script>
+</body>
+</html>
