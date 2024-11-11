@@ -1,10 +1,10 @@
-{% block title %}
-    Register a New Username
-{% endblock %}
+{% load static %}
+<link rel="stylesheet" type='text/css' href='{% static 'css/auth.css' %}'>
 
 {% block content %}
-    <h1>Register a New User</h1>
+    
     <form class="form-with-validation" action="/user/register/" method="post">
+        <div class="header-wrapper"><p>Register</p></div>
         {% csrf_token %}
         {{ form }}
         <button>Submit</button>

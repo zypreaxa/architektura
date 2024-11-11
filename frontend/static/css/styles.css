@@ -79,3 +79,10 @@
     height: calc(100vh - 5rem);
     overflow-y: auto;
   }
+  .form-with-validation > * {
+    color: grey;
+    padding: 10px;
+  }
+  .form-with-validation {
+    background-color: ;
+  }
