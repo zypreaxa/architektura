@@ -5,9 +5,3 @@ from django.http import HttpResponse
 
 def index(request):
     return render(request, 'index.html')    # Ensure the path matches the actual location
-
-def register(request):
-    return render(request, 'register.html') # Adjust path if needed
-
-def login(request):
-    return render(request, 'login.html')    # Adjust path if needed
