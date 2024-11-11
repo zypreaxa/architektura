@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Trigger sendMessage when the Enter key is pressed
     messageInput.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
+        if (event.key === "Enter") { //padaryti serverside patikrinima del tusciu inputu
             event.preventDefault(); // Prevent default form submission
             sendMessage();
         }
@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
             addMessageToChat(userMessage, userImage, "message");
             messageInput.value = ""; // Clear input field
 
-            // Display loading dots as a new message from the chatbot
             const responsePlaceholder = addMessageToChat("...", chatbotImage, "response");
 
             // Send message to the server
