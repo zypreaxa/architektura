@@ -21,7 +21,7 @@ from django.urls import include, path
 urlpatterns = [
     path('', include(('frontend.urls', 'frontend'), namespace='frontend')),
     path("nlp/", include("nlp.urls")),  
-    path("user/", include("user.urls")),
+    path("user/", include(("user.urls", 'user'), namespace='user')),
     path("admin/", admin.site.urls),
    
 ]

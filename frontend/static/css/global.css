@@ -1,0 +1,15 @@
+nav ul{
+    display: flex;
+    list-style-type: none;
+    justify-content: right;
+  }
+  nav ul li {
+    padding: 20px;
+  }
+  nav a {
+    text-decoration: none;
+    color: white;
+  }
+  nav li:hover {
+    background: #5C8966;
+  }

@@ -22,8 +22,9 @@ input {
     margin-top: 5px;
 }
 button {
-    background: black;
+    background: #5C8966;
     font-weight: bold;
+    border: none;
     
 }
 .header-wrapper {

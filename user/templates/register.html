@@ -1,8 +1,14 @@
 {% load static %}
 <link rel="stylesheet" type='text/css' href='{% static 'css/auth.css' %}'>
+<link rel="stylesheet" type='text/css' href='{% static 'css/global.css' %}'>
 
 {% block content %}
-    
+<nav>
+    <ul>
+      <li><a href="{% url 'user:register' %}">Register</a></li>
+      <li><a href="">Login</a></li>
+    </ul>
+</nav>
     <form class="form-with-validation" action="/user/register/" method="post">
         <div class="header-wrapper"><p>Register</p></div>
         {% csrf_token %}
