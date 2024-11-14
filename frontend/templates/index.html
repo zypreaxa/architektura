@@ -18,7 +18,12 @@
   <nav>
     <ul>
       <li><a href="{% url 'user:register' %}">Register</a></li>
-      <li><a href="">Login</a></li>
+      <li><a href="{% url 'user:login' %}">Login</a></li>
+      <li><a href="{% url 'user:profile' %}">🅿️</a></li>
+      <form action="{% url 'user:logout' %}" method="post">
+        {% csrf_token %}
+        <button>Logout</button>
+      </form>
     </ul>
   </nav>
 

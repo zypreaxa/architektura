@@ -4,8 +4,8 @@
 
 {% block content %}
 <main>
-    <form class="form-with-validation" action="/user/register/" method="post">
-        <div class="header-wrapper"><p>Register</p></div>
+    <form class="form-with-validation" action="/user/login/" method="post">
+        <div class="header-wrapper"><p>Login</p></div>
         {% csrf_token %}
         {{ form }}
         <button>Submit</button>
