@@ -17,13 +17,18 @@
   
   <nav>
     <ul>
-      <li><a href="{% url 'user:register' %}">Register</a></li>
-      <li><a href="{% url 'user:login' %}">Login</a></li>
-      <li><a href="{% url 'user:profile' %}">🅿️</a></li>
-      <form action="{% url 'user:logout' %}" method="post">
-        {% csrf_token %}
-        <button>Logout</button>
-      </form>
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'user:profile' %}">Profile</a></li>
+        <li class='logout'>
+          <form action="{% url 'user:logout' %}" method="post">
+            {% csrf_token %}
+            <button>Logout</button>
+          </form>
+        </li>
+      {% else %}
+        <li><a href="{% url 'user:register' %}">Register</a></li>
+        <li><a href="{% url 'user:login' %}">Login</a></li>
+      {% endif %}
     </ul>
   </nav>
 

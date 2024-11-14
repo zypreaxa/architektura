@@ -13,3 +13,12 @@ nav ul{
   nav li:hover {
     background: #5C8966;
   }
+  .logout button {
+    background: none;
+    border: none;
+    color: white;
+    font: inherit;
+  }
+  .logout:hover {
+    background: red; 
+  }

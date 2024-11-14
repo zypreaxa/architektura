@@ -26,7 +26,7 @@ def login_view(request):
 def logout_view(request):
     if request.method=="POST":
         logout(request)
-        return redirect("user:login")
+        return redirect("frontend:index")
         
 @login_required(login_url="/user/login/")
 def profile_view(request):

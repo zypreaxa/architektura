@@ -3,7 +3,7 @@
     margin: 0;
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
-  }
+}
   
   body{
     width: 100%;
@@ -86,4 +86,3 @@
   .form-with-validation {
     background-color: ;
   }
-
