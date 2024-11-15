@@ -1,8 +1,9 @@
 {% load static %}
 <link rel="stylesheet" type='text/css' href='{% static 'css/auth.css' %}'>
 <link rel="stylesheet" type='text/css' href='{% static 'css/global.css' %}'>
-
+{% include 'include/navbar.html' %}
 {% block content %}
+
 <main>
     <form class="form-with-validation" action="/user/login/" method="post">
         <div class="header-wrapper"><p>Login</p></div>
