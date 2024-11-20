@@ -6,6 +6,9 @@ nav ul{
   nav ul li {
     padding: 20px;
   }
+  nav ul li p {
+    color: green;
+  }
   nav a {
     text-decoration: none;
     color: white;

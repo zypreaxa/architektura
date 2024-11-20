@@ -1,6 +1,7 @@
 <nav>
     <ul>
       {% if user.is_authenticated %}
+        <li><p>Logged in as: {{request.user.username }} </p></li>
         <li><a href="{% url 'user:profile' %}">Profile</a></li>
         <li class='logout'>
           <form action="{% url 'user:logout' %}" method="post">
