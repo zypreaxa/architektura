@@ -24,12 +24,6 @@ class UserTag(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    preferred_cuisine = models.CharField(max_length=100)
+    preferred_recipe_type = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.user.username
-
-    def get_tags(self):
-        # Helper method to fetch tags related to the user profile
-        return ", ".join([tag.name for tag in self.tags.all()])
