@@ -3,6 +3,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
+from nlp.models import Tag
+from .forms import TagAssignmentForm
 
 # Registration view
 def register_view(request):
@@ -40,6 +42,29 @@ def logout_view(request):
 def profile_view(request):
     user_profile = UserProfile.objects.get(user=request.user)
     user_profile.preferred_cuisine = 'Italian'
+    tags = user_profile.tags.all()  # This will give you a queryset of Tag instances
+    tag_names = [tag.name for tag in tags]
     user_profile.save()
-    return render(request, "profile.html", {"user_profile": user_profile})
+    
+    # If it's a POST request, process the form
+    if request.method == 'POST':
+        form = TagAssignmentForm(request.POST)
+        if form.is_valid():
+            # Get the selected tags from the form
+            selected_tags = form.cleaned_data['selected_tags']
+
+            # Assuming each tag is a string, you can get the Tag objects from the database
+            tags = Tag.objects.filter(name__in=selected_tags)
+
+            # Save tags to the user profile (or wherever you want)
+            user_profile = UserProfile.objects.get(user=request.user)
+            user_profile.tags.set(tags)  # Assuming `tags` is a ManyToManyField in the profile model
+
+            # Redirect to a success page or reload the page
+            return redirect('user:profile')  # Change this to the appropriate URL
+
+    else:
+        form = TagAssignmentForm()
+           
+    return render(request, "profile.html", {"user_profile": user_profile, "tags": tag_names, "form": form})
 
