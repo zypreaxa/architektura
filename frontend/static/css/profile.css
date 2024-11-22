@@ -1,0 +1,23 @@
+main {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10%;
+}
+main > * {
+    background: #2a2727;
+    padding: 50px;
+    max-width: 50%;
+}
+main button {
+    padding: 10px 30px;
+    margin-top: 10px;
+    background: white;
+    border-radius: 10px;
+}
+main button:hover {
+    background: none;
+    border: 1px solid white;
+    color: white;
+}

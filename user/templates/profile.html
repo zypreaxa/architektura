@@ -7,26 +7,33 @@
     <title>Profile review</title>
     <link rel="stylesheet" type='text/css' href='{% static 'css/global.css' %}'>
     <link rel="stylesheet" type='text/css' href='{% static 'css/styles.css' %}'>
+    <link rel="stylesheet" type='text/css' href='{% static 'css/profile.css' %}'>
+
 </head>
 <body>
     {% include 'include/navbar.html' %}
     <main>
-        <p>Username: {{ user_profile.user.username }} </p>
-        <h1> your preferences: {{user_profile.preferred_cuisine}}</h1>
-        <h2>Your tags:</h2>
-        <ul>
-            {% for tag in tags %}
-                <li>{{tag}}</li>
-            {% empty %}
-                <li>No tags assigned yet.</li>
-            {% endfor %}
-        </ul>
+        <div>
+            <p>User: {{ user_profile.user.username }} </p>
+        </div>
+        <div>
+            <h4>Preferred attributes:</h4>
+            <ul>
+                {% for tag in tags %}
+                    <li>{{tag}}</li>
+                {% empty %}
+                    <li>No tags assigned yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Submit</button>
-        </form>
+        <div>
+            <form class="soft-preferences" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     </main>
 </body>
 </html>
