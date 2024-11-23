@@ -7,7 +7,8 @@ class UserProfile(models.Model):
     preferred_cuisine = models.CharField(max_length=100)
     preferred_recipe_type = models.CharField(max_length=100)
     
-    tags = models.ManyToManyField(Tag, related_name="user_profiles")
+    soft_tags = models.ManyToManyField(Tag, related_name="user_profiles_soft")
+    strict_tags = models.ManyToManyField(Tag, related_name="user_profiles_strict")
     
     def __str__(self):
         return f"{self.user_profile} - {self.tag}"
