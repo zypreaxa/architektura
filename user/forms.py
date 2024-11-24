@@ -2,29 +2,38 @@ from django import forms
 from nlp.models import Tag
 
 class TagAssignmentForm(forms.Form):
-    # Retrieve all existing tags from the database
-    tags = Tag.objects.all()
-    
-    # Dynamically create the choices list based on the tags in the database
-    CHOICES = [(tag.name, tag.name) for tag in tags]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Dynamically fetch valid tags with a tag_type
+        valid_tags = Tag.objects.exclude(tag_type__isnull=True).exclude(tag_type="")
+        
+        # Create the choices list based on the valid tags
+        choices = [(tag.name, tag.name) for tag in valid_tags]
+        
+        # Set the choices dynamically
+        self.fields['selected_tags'].choices = choices
 
-    # Use a MultipleChoiceField to allow users to select multiple tags
+    # Define the field here; choices will be set dynamically in __init__
     selected_tags = forms.MultipleChoiceField(
-        choices=CHOICES, 
-        widget=forms.CheckboxSelectMultiple,  # You can also use a select widget with multiple option
-        required=False  # Make it optional, or you can make it required if needed
+        widget=forms.CheckboxSelectMultiple,  # Use a checkbox widget for multi-selection
+        required=False  # Optional selection
     )
-    
 class StrictForm(forms.Form):
-    # Retrieve all existing tags from the database
-    tags = Tag.objects.all()
-    
-    # Dynamically create the choices list based on the tags in the database
-    CHOICES = [(tag.name, tag.name) for tag in tags]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Dynamically fetch valid tags with a tag_type
+        valid_tags = Tag.objects.exclude(tag_type__isnull=True).exclude(tag_type="")
+        
+        # Create the choices list based on the valid tags
+        choices = [(tag.name, tag.name) for tag in valid_tags]
+        
+        # Set the choices dynamically
+        self.fields['selected_tags'].choices = choices
 
-    # Use a MultipleChoiceField to allow users to select multiple tags
+    # Define the field here; choices will be set dynamically in __init__
     selected_tags = forms.MultipleChoiceField(
-        choices=CHOICES, 
-        widget=forms.CheckboxSelectMultiple,  # You can also use a select widget with multiple option
-        required=False  # Make it optional, or you can make it required if needed
+        widget=forms.CheckboxSelectMultiple,  # Use a checkbox widget for multi-selection
+        required=False  # Optional selection
     )
