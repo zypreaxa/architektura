@@ -8,30 +8,54 @@
     <link rel="stylesheet" type='text/css' href='{% static 'css/global.css' %}'>
     <link rel="stylesheet" type='text/css' href='{% static 'css/styles.css' %}'>
     <link rel="stylesheet" type='text/css' href='{% static 'css/profile.css' %}'>
-
 </head>
 <body>
     {% include 'include/navbar.html' %}
     <main>
         <div>
-            <p>User: {{ user_profile.user.username }} </p>
+            <p>User: {{ user_profile.user.username }}</p>
         </div>
-        <div>
-            <h4>Preferred attributes:</h4>
-            <ul>
-                {% for tag in tags %}
-                    <li>{{tag}}</li>
-                {% empty %}
-                    <li>No tags assigned yet.</li>
-                {% endfor %}
-            </ul>
+
+
+        <div class="pview">
+            <div>
+                <h4>Preferred Attributes:</h4>
+                <ul>
+                    {% for tag in soft_tags %}
+                        <li>{{ tag.name }}</li>
+                    {% empty %}
+                        <li>No soft tags assigned yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h4>Dietary restrictions:</h4>
+                <ul>
+                    {% for tag in strict_tags %}
+                        <li>{{ tag.name }}</li>
+                    {% empty %}
+                        <li>No strict tags assigned yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
 
         <div>
-            <form class="soft-preferences" method="post">
+            <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Submit</button>
+                <div class="preferences">
+                    <div>
+                        <h3>Soft Preferences</h3>
+                        {{ soft_form.as_p }}
+                    </div>
+                    
+                    <div>
+                        <h3>Strict Preferences</h3>
+                        {{ strict_form.as_p }}
+                    </div>
+                </div>
+
+                <button type="submit">Save Preferences</button>
             </form>
         </div>
     </main>

@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from nlp.models import Tag
-from .forms import TagAssignmentForm
+from .forms import TagAssignmentForm, StrictForm
 
 # Registration view
 def register_view(request):
@@ -41,28 +41,35 @@ def logout_view(request):
 @login_required(login_url="/user/login/")
 def profile_view(request):
     user_profile = UserProfile.objects.get(user=request.user)
-    tags = user_profile.soft_tags.all()  # This will give you a queryset of Tag instances
-    tag_names = [tag.name for tag in tags]
-    user_profile.save()
-    
-    # If it's a POST request, process the form
+    soft_tags = user_profile.soft_tags.all()  # Get the soft tags
+    strict_tags = user_profile.strict_tags.all()  # Get the strict tags
+
     if request.method == 'POST':
-        form = TagAssignmentForm(request.POST)
-        if form.is_valid():
-            # Get the selected tags from the form
-            selected_tags = form.cleaned_data['selected_tags']
+        soft_form = TagAssignmentForm(request.POST, prefix="soft")
+        strict_form = StrictForm(request.POST, prefix="strict")
+        
+        if soft_form.is_valid() and strict_form.is_valid():
+            # Handle soft preferences
+            selected_soft_tags = soft_form.cleaned_data['selected_tags']
+            soft_tags = Tag.objects.filter(name__in=selected_soft_tags)
+            user_profile.soft_tags.set(soft_tags)
 
-            # Assuming each tag is a string, you can get the Tag objects from the database
-            tags = Tag.objects.filter(name__in=selected_tags)
+            # Handle strict preferences
+            selected_strict_tags = strict_form.cleaned_data['selected_tags']
+            strict_tags = Tag.objects.filter(name__in=selected_strict_tags)
+            user_profile.strict_tags.set(strict_tags)
 
-            # Save tags to the user profile (or wherever you want)
-            user_profile = UserProfile.objects.get(user=request.user)
-            user_profile.soft_tags.set(tags)  # Assuming `tags` is a ManyToManyField in the profile mode
-            # Redirect to a success page or reload the page
-            return redirect('user:profile')  # Change this to the appropriate URL
+            # Redirect after successful submission
+            return redirect('user:profile')
 
     else:
-        form = TagAssignmentForm()
-           
-    return render(request, "profile.html", {"user_profile": user_profile, "tags": tag_names, "form": form})
+        soft_form = TagAssignmentForm(prefix="soft")
+        strict_form = StrictForm(prefix="strict")
 
+    return render(request, "profile.html", {
+        "user_profile": user_profile,
+        "soft_tags": soft_tags,
+        "strict_tags": strict_tags,
+        "soft_form": soft_form,
+        "strict_form": strict_form,
+    })

@@ -3,12 +3,12 @@ main {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 10%;
 }
 main > * {
     background: #2a2727;
     padding: 50px;
     max-width: 50%;
+    margin-left: 5%;
 }
 main button {
     padding: 10px 30px;
@@ -20,4 +20,8 @@ main button:hover {
     background: none;
     border: 1px solid white;
     color: white;
+}
+.preferences, .pview {
+    display: flex;
+    gap: 100px;
 }
