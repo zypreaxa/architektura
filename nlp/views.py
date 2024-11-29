@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.db.models import Q
 from .spacy_processor import process_chat_message  # Import the function from spacy_processor.py
 from nlp.models import Recipe, Tag
 from user.models import UserProfile  # Assuming your UserProfile model is in the 'user' app
@@ -18,13 +19,23 @@ def process_chat(request):
             entities = parsed_data.get("entities", [])
             
             # Extract tag names from entities
-            tag_names = [ent[0] for ent in entities if ent[1] in [
-                "COOKING_TIME", "SERVING_SIZE", "INGREDIENT", "METHOD",
-                "FLAVOR_PROFILE", "MEAL_TYPE", "DIETARY", "QUANTITY", "TEMPERATURE"
-            ]]
-          
+            tag_names = [
+                ent[0] for ent in entities if ent[1] in [
+                    "COOKING_TIME", "SERVING_SIZE", "INGREDIENT", "METHOD",
+                    "FLAVOR_PROFILE", "MEAL_TYPE", "DIETARY", "QUANTITY", "TEMPERATURE"
+                ]
+            ]
+
+            if not tag_names:
+                return JsonResponse({"recipes": []})  # No tags, no recipes
+
+            # Build a case-insensitive query using Q objects
+            query = Q()
+            for tag in tag_names:
+                query |= Q(tags__name__iexact=tag)
+
             # Query recipes based on extracted tags
-            matched_recipes = Recipe.objects.filter(tags__name__in=tag_names).distinct()
+            matched_recipes = Recipe.objects.filter(query).distinct()
 
             # Apply strict tag filtering if the user is authenticated
             if request.user.is_authenticated:
@@ -34,7 +45,10 @@ def process_chat(request):
                     strict_tag_names = user_profile.strict_tags.values_list("name", flat=True)
                     
                     # Exclude recipes with any of the strict tags
-                    matched_recipes = matched_recipes.exclude(tags__name__in=strict_tag_names)
+                    strict_query = Q()
+                    for strict_tag in strict_tag_names:
+                        strict_query |= Q(tags__name__iexact=strict_tag)
+                    matched_recipes = matched_recipes.exclude(strict_query)
                 except UserProfile.DoesNotExist:
                     pass  # Skip exclusion if user profile doesn't exist
             
@@ -42,7 +56,7 @@ def process_chat(request):
             unique_recipes = {recipe.name: recipe for recipe in matched_recipes}.values()
 
             if unique_recipes:
-                recipe_data = [{"name": recipe.name} for recipe in unique_recipes]
+                recipe_data = [{"id": recipe.id, "name": recipe.name} for recipe in unique_recipes]
                 return JsonResponse({"recipes": recipe_data})
             else:
                 return JsonResponse({"recipes": []})  # Empty list if no recipes are found

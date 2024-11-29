@@ -90,13 +90,25 @@ document.addEventListener("DOMContentLoaded", function () {
         if (typeof data === "string") {
             element.innerHTML = data;
         } else if (data.recipes && data.recipes.length > 0) {
-            // Display recipes
-            element.innerHTML = "Recipes: " + data.recipes.map(recipe => recipe.name).join(", ");
-            
-            // Show created tags (if any)
-            if (data.created_tags && data.created_tags.length > 0) {
-                element.innerHTML += "<br><strong>Created Tags:</strong> " + data.created_tags.join(", ");
-            }
+            // Display clickable recipe links
+            element.innerHTML = "Recipes:";
+            const recipeList = document.createElement("ul");
+            recipeList.className = "recipe-list";
+    
+            data.recipes.forEach(recipe => {
+                const recipeItem = document.createElement("li");
+                const recipeLink = document.createElement("a");
+    
+                // Use the recipe ID for the link
+                recipeLink.textContent = recipe.name;
+                recipeLink.href = `/recipe/${recipe.id}/`;  // Correctly use the ID
+                recipeLink.target = "_blank";  // Opens in a new tab (optional)
+    
+                recipeItem.appendChild(recipeLink);
+                recipeList.appendChild(recipeItem);
+            });
+    
+            element.appendChild(recipeList);
         } else {
             element.innerHTML = "No matching recipes found.";
         }
