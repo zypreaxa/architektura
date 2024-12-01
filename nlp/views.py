@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db.models import Q
 from .spacy_processor import process_chat_message  # Import the function from spacy_processor.py
-from nlp.models import Recipe, Tag
+from nlp.models import Recipe
 from user.models import UserProfile  # Assuming your UserProfile model is in the 'user' app
 
 @csrf_exempt  # Only use this if CSRF tokens are causing issues; it's recommended to keep CSRF enabled
