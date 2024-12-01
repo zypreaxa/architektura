@@ -11,13 +11,20 @@ def process_chat(request):
     if request.method == "POST":
         try:
             # Parse JSON data from the request body
-            data = json.loads(request.body)
+            try:
+                data = json.loads(request.body)
+            except json.JSONDecodeError:
+                return JsonResponse({"error": "Invalid JSON format"}, status=400)
+
+            # Validate that "message" is present and is a non-empty string
             message = data.get("message", "")
-            
+            if not isinstance(message, str) or not message.strip():
+                return JsonResponse({"error": "Message must be a non-empty string"}, status=400)
+
             # Process the message with spaCy to extract relevant entities
             parsed_data = process_chat_message(message)
             entities = parsed_data.get("entities", [])
-            
+
             # Extract tag names from entities
             tag_names = [
                 ent[0] for ent in entities if ent[1] in [
@@ -43,7 +50,7 @@ def process_chat(request):
                 try:
                     user_profile = UserProfile.objects.get(user=request.user)
                     strict_tag_names = user_profile.strict_tags.values_list("name", flat=True)
-                    
+
                     # Exclude recipes with strict tags
                     strict_query = Q()
                     for strict_tag in strict_tag_names:
@@ -73,8 +80,6 @@ def process_chat(request):
 
             return JsonResponse({"recipes": sorted_recipe_data})
 
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
     else:
