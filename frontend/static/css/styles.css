@@ -28,6 +28,13 @@
   .response{
     background-color: #494b59;
   }
+  .response li {
+    list-style: none;
+  }
+  .response li a {
+    text-decoration: none;
+    
+  }
   
   .messagebar{
     position: fixed;
@@ -86,3 +93,10 @@
   .form-with-validation {
     background-color: ;
   }
+  .highlight {
+    background-color: #ffffcc; /* Light yellow background */
+    font-weight: bold; /* Emphasized text */
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}

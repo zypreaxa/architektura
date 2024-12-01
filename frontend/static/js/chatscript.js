@@ -90,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (typeof data === "string") {
             element.innerHTML = data;
         } else if (data.recipes && data.recipes.length > 0) {
-            // Display clickable recipe links
             element.innerHTML = "Recipes:";
             const recipeList = document.createElement("ul");
             recipeList.className = "recipe-list";
@@ -99,10 +98,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 const recipeItem = document.createElement("li");
                 const recipeLink = document.createElement("a");
     
-                // Use the recipe ID for the link
                 recipeLink.textContent = recipe.name;
-                recipeLink.href = `/recipe/${recipe.id}/`;  // Correctly use the ID
-                recipeLink.target = "_blank";  // Opens in a new tab (optional)
+                recipeLink.href = `/recipe/${recipe.id}/`;
+                recipeLink.target = "_blank";
+    
+                // Highlight recipes matching soft preferences
+                if (recipe.matches_soft_preference) {
+                    recipeItem.className = "highlight"; // Add a specific class
+                }
     
                 recipeItem.appendChild(recipeLink);
                 recipeList.appendChild(recipeItem);

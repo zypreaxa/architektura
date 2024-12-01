@@ -37,29 +37,41 @@ def process_chat(request):
             # Query recipes based on extracted tags
             matched_recipes = Recipe.objects.filter(query).distinct()
 
-            # Apply strict tag filtering if the user is authenticated
+            # Fetch user profile to apply strict and soft preference filtering
+            soft_preference_tags = []
             if request.user.is_authenticated:
                 try:
-                    # Fetch the user's strict tags
                     user_profile = UserProfile.objects.get(user=request.user)
                     strict_tag_names = user_profile.strict_tags.values_list("name", flat=True)
                     
-                    # Exclude recipes with any of the strict tags
+                    # Exclude recipes with strict tags
                     strict_query = Q()
                     for strict_tag in strict_tag_names:
                         strict_query |= Q(tags__name__iexact=strict_tag)
                     matched_recipes = matched_recipes.exclude(strict_query)
-                except UserProfile.DoesNotExist:
-                    pass  # Skip exclusion if user profile doesn't exist
-            
-            # Remove duplicates and prepare the response
-            unique_recipes = {recipe.name: recipe for recipe in matched_recipes}.values()
 
-            if unique_recipes:
-                recipe_data = [{"id": recipe.id, "name": recipe.name} for recipe in unique_recipes]
-                return JsonResponse({"recipes": recipe_data})
-            else:
-                return JsonResponse({"recipes": []})  # Empty list if no recipes are found
+                    # Get soft preference tags
+                    soft_preference_tags = user_profile.soft_tags.values_list("name", flat=True)
+                except UserProfile.DoesNotExist:
+                    pass  # Skip if no user profile
+
+            # Prepare response data, flagging recipes that match soft preferences
+            recipe_data = []
+            for recipe in matched_recipes:
+                recipe_tags = recipe.tags.values_list("name", flat=True)
+                matches_soft_preference = any(tag in soft_preference_tags for tag in recipe_tags)
+                recipe_data.append({
+                    "id": recipe.id,
+                    "name": recipe.name,
+                    "matches_soft_preference": matches_soft_preference  # Highlight flag
+                })
+
+            # Sort recipes so that highlighted ones appear first
+            sorted_recipe_data = sorted(
+                recipe_data, key=lambda x: x["matches_soft_preference"], reverse=True
+            )
+
+            return JsonResponse({"recipes": sorted_recipe_data})
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
