@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
-from nlp.models import Tag
+from nlp.models import Tag, Recipe
 from .forms import TagAssignmentForm, StrictForm
 
 # Registration view
@@ -73,3 +73,11 @@ def profile_view(request):
         "soft_form": soft_form,
         "strict_form": strict_form,
     })
+
+@login_required
+def manage_recipes(request):
+    recipes = Recipe.objects.all()
+    return render(request, "recipe_manage.html", {"recipes": recipes})
+# def add_recipe
+# def remove_recipe
+# def edit_recipe

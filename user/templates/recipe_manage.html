@@ -1,0 +1,33 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% include 'include/navbar.html' %}
+<div class="table-container">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Remove</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+                <tr>
+                    <td>{{ recipe.id }}</td>
+                    <td>{{ recipe.name }}</td>
+                    <td>{{ recipe.instructions }}</td>
+                    <td><button>🚫</button></td>
+                    <td><button>✏️</button></td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No recipes found.</td>
+                </tr>
+            {% endfor %}
+            <td><button>➕</button></td>
+        </tbody>
+    </table>
+</div>
