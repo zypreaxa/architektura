@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 recipeLink.target = "_blank";
     
                 // Highlight recipes matching soft preferences
-                if (recipe.matches_soft_preference) {
+                if (recipe) { //if(recipe.matches_soft_preference)
                     recipeItem.className = "highlight"; // Add a specific class
                 }
     
