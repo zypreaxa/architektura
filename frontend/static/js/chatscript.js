@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
         messageElement.appendChild(imageElement);
 
         const textElement = document.createElement("span");
-        textElement.innerHTML = text;
+        textElement.textContent = text;
         messageElement.appendChild(textElement);
 
         const timestamp = document.createElement("span");
@@ -88,9 +88,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateChatBotResponse(element, data) {
         if (typeof data === "string") {
-            element.innerHTML = data;
+            element.textContent = data;
         } else if (data.recipes && data.recipes.length > 0) {
-            element.innerHTML = "Recipes:";
+            element.textContent = "Recipes:";
             const recipeList = document.createElement("ul");
             recipeList.className = "recipe-list";
     
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
             element.appendChild(recipeList);
         } else {
-            element.innerHTML = "No matching recipes found.";
+            element.textContent = "No matching recipes found.";
         }
     }
 
